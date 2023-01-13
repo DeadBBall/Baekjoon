@@ -5,9 +5,8 @@ using namespace std;
 
 int l, c;
 string alp, ans;
-bool visit[15];
 
-int includeVowel()
+int countVowel()
 {
 	int vowel = 0;
 	for(int i = 0; i < l; i++)
@@ -20,23 +19,19 @@ int includeVowel()
 
 void makeCode(int cnt)
 {
-	if(cnt == l)
+	if(ans.size() == l)
 	{
-		int vowel = includeVowel();
+		int vowel = countVowel();
 		int consonant = l - vowel;
 		if(1 <= vowel && 2 <= consonant)
 			cout << ans << "\n";
 		return;
 	}
-	for(int i = 0; i < c; i++)
+	for(int i = cnt; i < c; i++)
 	{
-		if((cnt == 0 || ans[cnt - 1] < alp[i]) && !visit[i])
-		{
-			visit[i] = 1;
-			ans[cnt] = alp[i];
-			makeCode(cnt + 1);
-			visit[i] = 0;
-		}
+		ans.push_back(alp[i]);
+		makeCode(i + 1);
+		ans.pop_back();
 	}
 }
 
@@ -52,8 +47,6 @@ int main(void)
 		cin >> input;
 		alp.push_back(input[0]);
 	}
-	for(int i = 0; i < l; i++)
-		ans.push_back('a');
 	sort(alp.begin(), alp.end());
 	makeCode(0);
 }

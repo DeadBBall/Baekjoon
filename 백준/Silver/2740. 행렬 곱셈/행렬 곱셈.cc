@@ -20,8 +20,8 @@ int main()
 	{
 		for (int j = 0; j < k; j++)
 		{
-			for (int k = 0; k < m; k++)
-				ans[i][j] += matrix1[i][k] * matrix2[k][j];
+			for (int l = 0; l < m; l++)
+				ans[i][j] += matrix1[i][l] * matrix2[l][j];
 			cout << ans[i][j] << " ";
 		}
 		cout << "\n";

@@ -14,7 +14,6 @@ int main(void)
 	cin >> n >> m;
 	vector<int> v[32001];
 	queue<int> tmp;
-	vector<int> ans;
 	for(int i = 0; i < m; i++)
 	{
 		int a, b;
@@ -25,27 +24,18 @@ int main(void)
 	for(int i = 1; i <= n; i++)
 	{
 		if(in_degree[i] == 0)
-		{
 			tmp.push(i);
-			in_degree[i] = -1;
-		}
 	}
 	while(!tmp.empty())
 	{
 		int now = tmp.front();
 		tmp.pop();
+		cout << now << " ";
 		for(int i = 0; i < v[now].size(); i++)
-			in_degree[v[now][i]]--;
-		ans.push_back(now);
-		for(int i = 1; i <= n; i++)
 		{
-			if(in_degree[i] == 0)
-			{
-				tmp.push(i);
-				in_degree[i] = -1;
-			}
+			in_degree[v[now][i]]--;
+			if(in_degree[v[now][i]] == 0)
+				tmp.push(v[now][i]);
 		}
 	}
-	for(int i = 0; i < ans.size(); i++)
-		cout << ans[i] << " ";
 }

@@ -6,16 +6,12 @@
 using namespace std;
 
 int t, n, k, time[1001], dp[1001], in[1001], w;
-vector<int> v[1001];
 
-void input()
+
+void playGame()
 {
 	cin >> n >> k;
-	for(int i = 1; i <= n; i++)
-	{
-		v[i].clear();
-		v[i].resize(n + 1);
-	}
+	vector<int> v[1001];
 	for(int i = 1; i <= n; i++)
 	{
 		cin >> time[i];
@@ -30,10 +26,6 @@ void input()
 		in[b]++;
 	}
 	cin >> w;
-}
-
-void playGame()
-{
 	queue<int> q;
 	for(int i = 1; i <= n; i++)
 	{
@@ -66,7 +58,6 @@ int main()
 	cin >> t;
 	for(int tc = 0; tc < t; tc++)
 	{
-		input();
 		playGame();
 	}
 }

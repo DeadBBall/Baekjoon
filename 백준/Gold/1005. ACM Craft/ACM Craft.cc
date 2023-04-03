@@ -47,10 +47,13 @@ void playGame()
 			if(in[end] == 0)
 			{
 				q.push(end);
+				if(end == w)
+				{
+					return;
+				}
 			}
 		}
 	}
-	cout << dp[w] << "\n";
 }
 
 int main()
@@ -59,5 +62,6 @@ int main()
 	for(int tc = 0; tc < t; tc++)
 	{
 		playGame();
+		cout << dp[w] << "\n";
 	}
 }

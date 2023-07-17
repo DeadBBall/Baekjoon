@@ -1,48 +1,30 @@
 #include <iostream>
 #include <vector>
-#include <cmath>
 using namespace std;
 typedef long long ll;
-typedef pair<int, ll> pill;
 
-ll arr[1000001];
-vector <ll> tree;
+vector <ll> arr;
 int n, m, k;
+vector <ll> fenwick;
 
-ll makeTree(int node, int start, int end)
+void update(int idx, ll value)
 {
-	if(start == end)
+	while(idx < (int)fenwick.size())
 	{
-		tree[node] = arr[start];
-		return tree[node];
+		fenwick[idx] += value;
+		idx += (idx & -idx);
 	}
-	int mid = (start + end) / 2;
-	tree[node] = makeTree(node * 2, start, mid) + makeTree(node * 2 + 1, mid + 1, end);
-	return tree[node];
 }
 
-ll calculateSum(int node, int start, int end, int left, int right)
+ll sum(int idx)
 {
-	if (left > end || right < start)
-		return 0;
-	if (left <= start && end <= right)
-		return tree[node];
-	int mid = (start + end) / 2;
-	return calculateSum(node * 2, start, mid, left, right) + calculateSum(node * 2 + 1, mid + 1, end, left, right);
-}
-
-ll changeTree(int node, int start, int end, int objNode, ll input)
-{
-	if(objNode < start || objNode > end)
-		return tree[node];
-	if(objNode == start && start == end)
+	ll sum = 0;
+	while(idx > 0)
 	{
-		tree[node] = input;
-		return tree[node];
+		sum += fenwick[idx];
+		idx -=(idx & -idx);
 	}
-	int mid = (start + end) / 2;
-	tree[node] = changeTree(node * 2, start, mid, objNode, input) + changeTree(node * 2 + 1, mid + 1, end, objNode, input);
-	return tree[node];
+	return sum;
 }
 
 int main(void)
@@ -51,19 +33,25 @@ int main(void)
 	cin.tie(NULL);
 	cout.tie(NULL);
 	cin >> n >> m >> k;
-	int h = ceil(log2(n));
-	tree.resize(1 << (h + 1));
-	for(int i = 0; i < n; i++)
+	fenwick.resize(n + 1);
+	arr.resize(n + 1);
+	for(int i = 1; i <= n; i++)
+	{
 		cin >> arr[i];
-	makeTree(1, 0, n - 1);
+		update(i, arr[i]);
+	}
 	for(int i = 0; i < m + k; i++)
 	{
 		int a, b;
 		ll c;
 		cin >> a >> b >> c;
 		if(a == 1)
-			changeTree(1, 0, n - 1, b - 1, c);
+		{
+			ll diff = c - arr[b];
+			arr[b] = c;
+			update(b, diff);
+		}
 		else
-			cout << calculateSum(1, 0, n - 1, b - 1, c - 1) << "\n";
+			cout << sum(c) - sum(b - 1) << "\n";
 	}
 }

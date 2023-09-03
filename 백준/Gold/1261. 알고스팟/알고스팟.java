@@ -1,3 +1,5 @@
+import java.util.Comparator;
+import java.util.PriorityQueue;
 import java.util.Scanner;
 
 public class Main {
@@ -9,15 +11,14 @@ public class Main {
 	static final int INF = 222;
 	static int n, m;
 	static char[][] board;
-	static boolean[][][] visit;
+	static boolean[][] visit;
 	static int maxBrokenWall;
 	static Point start;
 	static Point end;
 	
-	
 	public static void main(String[] args) {
 		input();
-		escapeMaze(start, 0);
+		escapeMaze();
 		System.out.println(maxBrokenWall);
 	}
 
@@ -25,7 +26,7 @@ public class Main {
 		m = sc.nextInt();
 		n = sc.nextInt();
 		board = new char[n][m];
-		visit = new boolean[n][m][INF];
+		visit = new boolean[n][m];
 		
 		for(int y = 0; y < n; y++) {
 			String inputBoard = sc.next();
@@ -33,53 +34,63 @@ public class Main {
 			board[y] = inputBoard.toCharArray();
 		}
 		
-		start = new Point(0, 0);
-		end = new Point(n - 1, m - 1);
+		start = new Point(0, 0, 0);
+		end = new Point(n - 1, m - 1, 0);
 		
-		visit[0][0][0] = true;
+		visit[0][0] = true;
 		maxBrokenWall = INF;
 	}
 
-	static void escapeMaze(Point now, int brokenWall) {
-		if(brokenWall + 1 == INF) return;
-		
-		if(now.y == end.y && now.x == end.x) {
-			maxBrokenWall = Math.min(maxBrokenWall, brokenWall);
-			return;
-		}
-		
-		for(int drct = 0; drct < 4; drct++) {
-			int ny = now.y + dy[drct];
-			int nx = now.x + dx[drct];
-			
-			if(!canMove(ny, nx)) continue;
-			
-			if(board[ny][nx] == WALL && !visit[ny][nx][brokenWall + 1]) {
-				board[ny][nx] = EMPTY;
-				visit[ny][nx][brokenWall + 1] = true;
-				escapeMaze(new Point(ny, nx), brokenWall + 1);
-				board[ny][nx] = WALL;
+	static void escapeMaze() {
+		PriorityQueue<Point> pointPQ = new PriorityQueue<>(new Comparator<Point>() {
+			@Override
+			public int compare(Point a, Point b) {
+				return a.brokenWallCount - b.brokenWallCount;
 			}
-			else if(board[ny][nx] == EMPTY && !visit[ny][nx][brokenWall]){
-				visit[ny][nx][brokenWall] = true;
-				escapeMaze(new Point(ny, nx), brokenWall);
+		});
+		
+		pointPQ.add(start);
+		
+		while(!pointPQ.isEmpty()) {
+			Point now = pointPQ.remove();
+			
+			if(now.y == end.y && now.x == end.x) {
+				maxBrokenWall = now.brokenWallCount;
+				return;
 			}
 			
+			for(int drct = 0; drct < 4; drct++) {
+				int ny = now.y + dy[drct];
+				int nx = now.x + dx[drct];
+				
+				if(!canMove(ny, nx)) continue;
+				
+				visit[ny][nx] = true;
+				
+				if(board[ny][nx] == WALL)
+					pointPQ.add(new Point(ny, nx, now.brokenWallCount + 1));
+				else
+					pointPQ.add(new Point(ny, nx, now.brokenWallCount));
+			}
 		}
+		
+
 	}
 	
 	static boolean canMove(int y, int x) {
-		return !(y < 0 || x < 0 || y >= n || x >= m);
+		return !(y < 0 || x < 0 || y >= n || x >= m || visit[y][x]);
 	}
 	
 
 	static class Point {
 		int y;
 		int x;
+		int brokenWallCount;
 
-		public Point(int y, int x) {
+		public Point(int y, int x, int brokenWallCount) {
 			this.y = y;
 			this.x = x;
+			this.brokenWallCount = brokenWallCount;
 		}
 
 	}

@@ -3,61 +3,56 @@ import java.util.*;
 public class Main {
     static Scanner sc = new Scanner(System.in);
     static int n;
-    static boolean[] visit;
-    static Set<Integer> ansNumbers;
-    static int ansCount;
+    static int[] dp;
+    static int[] route;
+    static StringBuilder ansMaker;
 
     public static void main(String[] args) {
         input();
-        makeOne(n, new TreeSet<>(Set.of(n)));
+        makeOne();
         printAns();
     }
 
     static void input() {
        n = sc.nextInt();
-       visit = new boolean[n + 1];
-       ansCount = 10000000;
+       dp = new int[n + 1];
+       route = new int[n + 1];
+       ansMaker = new StringBuilder();
+       Arrays.fill(dp, Integer.MAX_VALUE);
 
-       ansNumbers = new TreeSet<>(Collections.reverseOrder());
-       ansNumbers.add(n);
+       dp[1] = 0;
     }
 
-    static void makeOne(int now, Set<Integer> numbers) {
-        if(visit[now] && ansCount <= numbers.size()) return;
-
-        visit[now] = true;
-
-        if(now == 1) {
-            if(ansCount > numbers.size()) {
-                ansCount = numbers.size();
-                ansNumbers = new TreeSet<>(new Comparator<Integer>() {
-                    @Override
-                    public int compare(Integer a, Integer b) {
-                        return b - a;
-                    }
-                });
-                ansNumbers.addAll(numbers);
+    static void makeOne() {
+        for(int num = 2; num <= n; num++) {
+            if(canCalculate(num, 3) && dp[num / 3] + 1 < dp[num]) {
+                dp[num] = dp[num / 3] + 1;
+                route[num] = num / 3;
             }
-            return;
+            if(canCalculate(num, 2) && dp[num / 2] + 1 < dp[num]) {
+                dp[num] = dp[num / 2] + 1;
+                route[num] = num / 2;
+            }
+            if(dp[num - 1] + 1 < dp[num]) {
+                dp[num] = dp[num - 1] + 1;
+                route[num] = num - 1;
+            }
         }
+    }
 
-        if(now % 3 == 0) {
-            numbers.add(now / 3);
-            makeOne(now / 3, numbers);
-            numbers.remove(now / 3);
+    static boolean canCalculate(int number, int caseNum) {
+        if(caseNum == 3) {
+            return number % 3 == 0;
         }
-        if(now % 2 == 0) {
-            numbers.add(now / 2);
-            makeOne(now / 2, numbers);
-            numbers.remove(now / 2);
-        }
-        numbers.add(now - 1);
-        makeOne(now - 1, numbers);
-        numbers.remove(now - 1);
+        return number % 2 == 0;
     }
 
     static void printAns() {
-        System.out.println(ansNumbers.size() - 1);
-        ansNumbers.forEach(number -> System.out.print(number + " "));
+        ansMaker.append(dp[n]).append("\n");
+        while(n > 0) {
+            ansMaker.append(n + " ");
+            n = route[n];
+        }
+        System.out.println(ansMaker);
     }
 }

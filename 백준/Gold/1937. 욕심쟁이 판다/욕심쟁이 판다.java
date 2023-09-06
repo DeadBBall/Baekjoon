@@ -13,7 +13,7 @@ public class Main {
     public static void main(String[] args) {
         input();
         eatBamboo();
-        System.out.println(maxDist);
+        System.out.println(maxDist + 1);
     }
 
     static void input() {
@@ -32,8 +32,8 @@ public class Main {
         for(int y = 0; y < n; y++) {
             for(int x = 0; x < n; x++) {
                 if(dp[y][x] != 0) continue;
-                
-                maxDist = Math.max(dfs(new Point(y, x, 1)), maxDist);
+
+                maxDist = Math.max(dfs(new Point(y, x)), maxDist);
             }
         }
     }
@@ -41,8 +41,6 @@ public class Main {
     static int dfs(Point now) {
         if(dp[now.y][now.x] != 0)
             return dp[now.y][now.x];
-
-        dp[now.y][now.x] = 1;
 
         for(int drct = 0; drct < 4; drct++) {
             int ny = now.y + DY[drct];
@@ -52,7 +50,7 @@ public class Main {
 
             if(board[now.y][now.x] >= board[ny][nx]) continue;
 
-            int result = dfs(new Point(ny, nx, now.dist + 1));
+            int result = dfs(new Point(ny, nx));
 
             dp[now.y][now.x] = Math.max(dp[now.y][now.x], result + 1);
         }
@@ -67,12 +65,10 @@ public class Main {
     static class Point {
         int y;
         int x;
-        int dist;
 
-        public Point(int y, int x, int dist) {
+        public Point(int y, int x) {
             this.y = y;
             this.x = x;
-            this.dist = dist;
         }
     }
 

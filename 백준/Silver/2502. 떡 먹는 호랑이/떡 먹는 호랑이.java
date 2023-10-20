@@ -19,6 +19,7 @@ public class Main {
         bCounts = new int[d + 1];
         aCounts[1] = 1;
         bCounts[2] = 1;
+        b = 1;
     }
 
     static void countRiceCake() {
@@ -26,10 +27,11 @@ public class Main {
             aCounts[day] = aCounts[day - 1] + aCounts[day - 2];
             bCounts[day] = bCounts[day - 1] + bCounts[day - 2];
         }
-        for(b = 2; ;b++) {
-            for(a = 1; a < b;a++) {
-                if(bCounts[d] * b + aCounts[d] * a == k)
-                    return;
+        for(a = 1; ;a++) {
+            int rest = k - aCounts[d] * a;
+            if(rest % bCounts[d] == 0) {
+                b = rest / bCounts[d];
+                return;
             }
         }
     }

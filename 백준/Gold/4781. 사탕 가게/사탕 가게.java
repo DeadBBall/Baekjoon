@@ -10,6 +10,7 @@ public class Main {
     static StringBuilder ansMaker = new StringBuilder();
 
     public static void main(String[] args) {
+
         while(true) {
             input();
             if(n == 0 && m == 0) break;
@@ -42,9 +43,8 @@ public class Main {
     }
 
     static void calculateHighCalorie() {
-        for(int money = candies[0].cost; money <= m; money++) {
-            for(int candyIdx = 0; candyIdx < n; candyIdx++) {
-                if(money < candies[candyIdx].cost) continue;
+        for(int candyIdx = 0; candyIdx < n; candyIdx++) {
+            for(int money = candies[candyIdx].cost; money <= m; money++) {
 
                 dp[money] = Math.max(dp[money], dp[money - candies[candyIdx].cost] + candies[candyIdx].calorie);
                 ans = Math.max(dp[money], ans);

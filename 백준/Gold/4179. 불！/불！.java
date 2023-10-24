@@ -9,8 +9,8 @@ public class Main {
     static final char WALL = '#';
     static Position jihoonStart;
     static List<Position> firePosition;
-    static PriorityQueue<Position> fireQueue;
-    static PriorityQueue<Position> jihoonQueue;
+    static Queue<Position> fireQueue;
+    static Queue<Position> jihoonQueue;
     static int ySize, xSize, ans;
     static char[][] board;
     static boolean[][] visit;
@@ -42,19 +42,10 @@ public class Main {
             }
         }
 
-        fireQueue = new PriorityQueue<>(new Comparator<Position>() {
-            @Override
-            public int compare(Position o1, Position o2) {
-                return o1.time - o2.time;
-            }
-        });
+        fireQueue = new LinkedList<>();
 
-        jihoonQueue = new PriorityQueue<>(new Comparator<Position>() {
-            @Override
-            public int compare(Position o1, Position o2) {
-                return o1.time - o2.time;
-            }
-        });
+
+        jihoonQueue = new LinkedList<>();
     }
 
     static void escapeMaze() {
@@ -99,7 +90,6 @@ public class Main {
     static void jihoonMove(int time) {
         while(!jihoonQueue.isEmpty()) {
             Position nowJihoon = jihoonQueue.remove();
-//            System.out.println(nowJihoon.time + " " + nowJihoon.y + " " + nowJihoon.x);
             if(canEscape(nowJihoon.y, nowJihoon.x)) {
                 ans = nowJihoon.time + 1;
                 return;
@@ -129,5 +119,4 @@ public class Main {
             this.time = time;
         }
     }
-
 }

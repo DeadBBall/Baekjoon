@@ -17,7 +17,6 @@ public class Main {
         z = sc.nextInt();
         m = sc.nextInt();
         obstacles = new boolean[n + 1];
-        visit = new boolean[n + 1];
 
         for(int idx = 0; idx < m; idx++) {
             int pos = sc.nextInt();
@@ -31,7 +30,7 @@ public class Main {
 
         for(int move = 1; ;move++) {
             int now = 1;
-            Arrays.fill(visit, false);
+            visit = new boolean[n + 1];
             visit[now] = true;
             while(true) {
                 now = (now + move) % n;

@@ -7,8 +7,7 @@ public class Main {
 
     public static void main(String[] args) {
         input();
-        searchNaturalNumber();
-        System.out.println(ans);
+        System.out.println(n % 2 == 0 ? numbers[n / 2 - 1] : numbers[n / 2]);
     }
     static void input() {
         n = sc.nextInt();
@@ -19,24 +18,5 @@ public class Main {
             numbers[numIdx] = sc.nextInt();
         }
         Arrays.sort(numbers);
-    }
-
-    static void searchNaturalNumber() {
-        for(int number = 1; number <= numbers[n - 1]; number++) {
-            int diff = calulateDiff(number);
-            if(diff < minDiff) {
-                ans = number;
-                minDiff = diff;
-            }
-            else return;
-        }
-    }
-
-    static int calulateDiff(int number) {
-        int result = 0;
-        for(int numIdx = 0; numIdx < n; numIdx++) {
-            result += Math.abs(number - numbers[numIdx]);
-        }
-        return result;
     }
 }

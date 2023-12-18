@@ -1,4 +1,8 @@
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.Scanner;
+import java.util.StringTokenizer;
 
 public class Main {
 	static final Scanner SC = new Scanner(System.in);
@@ -6,58 +10,59 @@ public class Main {
 	static final char EMPTY = '.';
 	static final int[] DY = {-1, 0, 1};
 	static int r, c, ans;
-	static boolean finish;
 	static char[][] board;
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws IOException {
 		input();
 		checkAll();
 		System.out.println(ans);
 	}
 
-	static void input() {
-		r = SC.nextInt();
-		c = SC.nextInt();
+	static void input() throws IOException {
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		StringTokenizer st = new StringTokenizer(br.readLine());
+		
+		r = Integer.parseInt(st.nextToken());
+		c = Integer.parseInt(st.nextToken());
 		board = new char[r][c];
 
 		for(int y = 0; y < r; y++) {
-			String inputBoard = SC.next();
+			String inputBoard = br.readLine();
 			for(int x = 0; x < c; x++) {
-				board[y] = inputBoard.toCharArray();
+				board[y][x] = inputBoard.charAt(x);
 			}
 		}
 	}
 	
 	static void checkAll() {
 		for(int y = 0; y < r; y++) {
-			finish = false;
+			board[y][0] = BUILDING;
 			connectPipe(y, 0);
 		}
 	}
 	
-	static void connectPipe(int nowY, int nowX) {
-		board[nowY][nowX] = BUILDING;
-		
+	static boolean connectPipe(int nowY, int nowX) {		
 		if(nowX == c - 1) {
 			ans++;
-			finish = true;
-			return;
+			return true;
 		}
 		
 		for(int drct = 0; drct < 3; drct++) {
-			if(finish) return;
 			int ny = nowY + DY[drct];
 			int nx = nowX + 1;
 			
 			if(!canMove(ny, nx)) continue;
 			
-			connectPipe(ny, nx);
+			board[ny][nx] = BUILDING;
+			
+			if(connectPipe(ny, nx)) return true;
 		}
+		
+		return false;
 	}
 	
 	static boolean canMove(int y, int x) {
-		return y >= 0 && y < r && x >= 0 && x < c
-				&& board[y][x] == EMPTY;
+		return y >= 0 && y < r && board[y][x] == EMPTY;
 	}
 }
 

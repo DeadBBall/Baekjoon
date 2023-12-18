@@ -8,7 +8,6 @@ public class Main {
 	static int r, c, ans;
 	static boolean finish;
 	static char[][] board;
-	static boolean[][] visit;
 
 	public static void main(String[] args) {
 		input();
@@ -20,7 +19,6 @@ public class Main {
 		r = SC.nextInt();
 		c = SC.nextInt();
 		board = new char[r][c];
-		visit = new boolean[r][c];
 
 		for(int y = 0; y < r; y++) {
 			String inputBoard = SC.next();
@@ -38,7 +36,7 @@ public class Main {
 	}
 	
 	static void connectPipe(int nowY, int nowX) {
-		visit[nowY][nowX] = true;
+		board[nowY][nowX] = BUILDING;
 		
 		if(nowX == c - 1) {
 			ans++;
@@ -59,7 +57,7 @@ public class Main {
 	
 	static boolean canMove(int y, int x) {
 		return y >= 0 && y < r && x >= 0 && x < c
-				&& !visit[y][x] && board[y][x] == EMPTY;
+				&& board[y][x] == EMPTY;
 	}
 }
 

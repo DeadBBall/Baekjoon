@@ -16,7 +16,7 @@ public class Main {
 
 	public static void main(String[] args) {
 		input();
-		organizeSevenPrincess(0);
+		organizeSevenPrincess(0, 0, 0);
 		System.out.println(ans);
 	}
 
@@ -33,8 +33,11 @@ public class Main {
 		princesses = new HashSet<>();
 	}
 
-	static void organizeSevenPrincess(int start) {
-		if (princesses.size() == 7) {
+	static void organizeSevenPrincess(int start, int somCount, int totalCount) {
+		if(7 - totalCount + somCount < 4) return;
+		
+		if (totalCount == 7) {
+			
 			if (checkSevenPrincess())
 				ans++;
 			return;
@@ -42,16 +45,13 @@ public class Main {
 
 		for (int now = start; now < 25; now++) {
 			princesses.add(now);
-			organizeSevenPrincess(now + 1);
+			organizeSevenPrincess(now + 1, board[now / 5][now % 5] == SOM ? somCount + 1 : somCount, totalCount + 1);
 			princesses.remove(now);
 		}
 	}
 
 	static boolean checkSevenPrincess() {
 		boolean[] visit = new boolean[25];
-
-		int somCount = 0;
-		int yeonCount = 0;
 		
 		int bfsCount = 1;
 		int now = princesses.iterator().next();
@@ -65,11 +65,6 @@ public class Main {
 			
 			int y = now / 5;
 			int x = now % 5;
-			
-			if(board[y][x] == SOM) somCount++;
-			else if(board[y][x] == YEON) yeonCount++;
-			
-			if(yeonCount >= 4) break;
 			
 			for(int drct = 0; drct < 4; drct++) {
 				int ny = y + DY[drct];
@@ -90,7 +85,7 @@ public class Main {
 			
 		}
 		
-		return bfsCount == 7 && somCount >= 4;
+		return bfsCount == 7;
 	}
 	
 	static boolean canMove(int y, int x) {

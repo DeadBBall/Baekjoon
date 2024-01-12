@@ -4,7 +4,7 @@ public class Main {
 	static final Scanner SC = new Scanner(System.in);
 	static final int INF = 123456789; 
 	static int n, m, ans;
-	static int[][] diffs;
+	static boolean[][] diffs;
 
     public static void main(String[] args) {
     	input();
@@ -16,21 +16,13 @@ public class Main {
     	n = SC.nextInt();
     	m = SC.nextInt();
     	
-    	diffs = new int[n + 1][n + 1];
-    	
-    	for(int first = 1; first <= n; first++) {
-    		for(int second = 1; second <= n; second++) {
-    			if(first == second) continue;
-    			
-    			diffs[first][second] = INF;
-    		}
-    	}
-    	
+    	diffs = new boolean[n + 1][n + 1];
+
     	while(m-- > 0) {
     		int small = SC.nextInt();
     		int big = SC.nextInt();
     		
-    		diffs[small][big] = 1;
+    		diffs[small][big] = true;
     	}
     	
     }
@@ -43,7 +35,8 @@ public class Main {
     			for(int end = 1; end <= n; end++) {
     				if(start == end) continue;
     				
-    				diffs[start][end] = Math.min(diffs[start][mid] + diffs[mid][end], diffs[start][end]);
+    				if(diffs[start][mid] && diffs[mid][end])
+    					diffs[start][end] = true;
     				
     			}
     		}
@@ -56,7 +49,7 @@ public class Main {
     		for(int end = 1; end <= n; end++) {
     			if(start == end) continue;
     			
-    			if(diffs[start][end] == INF && diffs[end][start] == INF) {
+    			if(!diffs[start][end] && !diffs[end][start]) {
     				count++;
     				break;
     			}

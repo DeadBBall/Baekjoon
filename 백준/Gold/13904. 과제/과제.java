@@ -53,8 +53,8 @@ public class Main {
 				days[today] = now.score;
 		}
 
-		for (int day = lastday; day > 0; day--) {
-			ans += days[day];
+		for (int score : days) {
+			ans += score;
 		}
 
 	}

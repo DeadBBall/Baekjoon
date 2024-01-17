@@ -1,5 +1,5 @@
-import java.util.Comparator;
-import java.util.PriorityQueue;
+import java.util.LinkedList;
+import java.util.Queue;
 import java.util.Scanner;
 
 public class Main {
@@ -48,12 +48,7 @@ public class Main {
 	}
 	
 	static void escapeSangBeomBuilding() {
-		PriorityQueue<Position> positionQueue = new PriorityQueue<>(new Comparator<Position>() {
-			@Override
-			public int compare(Position a, Position b) {
-				return a.minute - b.minute;
-			}
-		});
+		Queue<Position> positionQueue = new LinkedList<>();
 		
 		positionQueue.add(start);
 		

@@ -24,7 +24,6 @@ public class Main {
 	static void rearrangeOthello() {
 		int diffBCnt = 0;
 		int diffWCnt = 0;
-		int ans = 0;
 		
 		for(int othelloIdx = 0; othelloIdx < n; othelloIdx++) {
 			char originChar = origin.charAt(othelloIdx);
@@ -36,10 +35,7 @@ public class Main {
 			
 			else diffWCnt++;
 		}
-		
-		ans = ((diffBCnt + diffWCnt) + Math.abs(diffBCnt - diffWCnt)) / 2;
-		
-		ansMaker.append(ans).append("\n");
+		ansMaker.append(diffBCnt >= diffWCnt ? diffBCnt : diffWCnt).append("\n");
 	}
 	
 }

@@ -53,24 +53,25 @@ public class Main {
         int cPlusDIdx = n * n - 1;
 
         while(aPlusBIdx < n * n && cPlusDIdx >= 0) {
-            int sum = aPlusB[aPlusBIdx] + cPlusD[cPlusDIdx];
+            int left = aPlusB[aPlusBIdx];
+            int right = cPlusD[cPlusDIdx];
+            int sum =  left + right;
 
             if(sum == 0) {
-                long aCount = 1;
-                long cCount = 1;
+                long aCount = 0;
+                long cCount = 0;
 
-                while(aPlusBIdx + 1 < n * n && aPlusB[aPlusBIdx] == aPlusB[aPlusBIdx + 1]) {
+                while(aPlusBIdx < n * n && aPlusB[aPlusBIdx] == left) {
                     aCount++;
                     aPlusBIdx++;
                 }
 
-                while(cPlusDIdx > 0 && cPlusD[cPlusDIdx] == cPlusD[cPlusDIdx - 1]) {
+                while(cPlusDIdx >= 0 && cPlusD[cPlusDIdx] == right) {
                     cCount++;
                     cPlusDIdx--;
                 }
 
                 ans += aCount * cCount;
-                aPlusBIdx++;
             }
             else if(sum > 0) {
                 cPlusDIdx--;

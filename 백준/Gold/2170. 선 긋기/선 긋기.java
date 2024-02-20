@@ -1,15 +1,13 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.Arrays;
-import java.util.Comparator;
-import java.util.StringTokenizer;
+import java.util.*;
 
 public class Main {
 //    static Scanner sc = new Scanner(System.in);
     static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
     static int n, ans;
-    static Edge[] edges;
+    static List<Edge> edges;
 
     public static void main(String[] args) throws IOException {
         input();
@@ -19,14 +17,14 @@ public class Main {
 
     static void input() throws IOException {
         n = Integer.parseInt(br.readLine());
-        edges = new Edge[n];
+        edges = new ArrayList<>();
 
         for(int edgeIdx = 0; edgeIdx < n; edgeIdx++) {
             StringTokenizer st = new StringTokenizer(br.readLine());
-            edges[edgeIdx] = new Edge(Integer.parseInt(st.nextToken()), Integer.parseInt(st.nextToken()));
+            edges.add(new Edge(Integer.parseInt(st.nextToken()), Integer.parseInt(st.nextToken())));
         }
 
-        Arrays.sort(edges, new Comparator<Edge>() {
+        Collections.sort(edges, new Comparator<Edge>() {
             @Override
             public int compare(Edge a, Edge b) {
                 if(a.start == b.start)
@@ -37,7 +35,7 @@ public class Main {
     }
 
     static void measureLength() {
-        Edge prev = edges[0];
+        Edge prev = edges.get(0);
         ans += prev.end - prev.start;
 
         for(Edge now : edges) {

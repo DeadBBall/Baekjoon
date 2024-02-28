@@ -7,7 +7,7 @@ public class Main {
     static Scanner sc = new Scanner(System.in);
     static double ans;
     static boolean[][] visit;
-    static int[] probabilities;
+    static double[] probabilities;
     static int n;
 
     public static void main(String[] args) {
@@ -21,9 +21,9 @@ public class Main {
         visit = new boolean[29][29];
         visit[START][START] = true;
 
-        probabilities = new int[4];
+        probabilities = new double[4];
         for(int drct = 0; drct < 4; drct++) {
-            probabilities[drct] = sc.nextInt();
+            probabilities[drct] = (double) sc.nextInt() / 100;
         }
     }
 
@@ -44,15 +44,12 @@ public class Main {
 
                 visit[ny][nx] = true;
 
-                moveRobot(moveCount + 1, probability * probabilities[drct] / 100, next);
+                moveRobot(moveCount + 1, probability * probabilities[drct], next);
 
                 visit[ny][nx] = false;
             }
         }
-
-        visit[now.y][now.x] = false;
     }
-
 }
 
 class Position {

@@ -37,8 +37,8 @@ public class Main {
         }
 
         else {
-            int targetY = k / m + 1;
-            int targetX = k % m;
+            int targetY = (k - 1) / m + 1;
+            int targetX = (k - 1) % m + 1;
 
             for(int y = 2; y <= targetY; y++) {
                 for(int x = 2; x <= targetX; x++) {

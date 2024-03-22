@@ -2,43 +2,32 @@ import java.util.*;
 
 public class Main {
     static Scanner sc = new Scanner(System.in);
-    static List<Integer> iceCreams;
-    static Set<Integer>[] badCombinations;
+    static int[] iceCreams;
+    static boolean[][] badCombinations;
     static int n, m, ans;
 
     public static void main(String[] args) {
         input();
-        eatIceCream(1);
+        eatIceCream(0, 1);
         System.out.println(ans);
     }
 
     static void input() {
         n = sc.nextInt();
         m = sc.nextInt();
-        iceCreams = new ArrayList<>();
-        badCombinations = new Set[n + 1];
+        iceCreams = new int[3];
+        badCombinations = new boolean[n + 1][n + 1];
 
         while(m-- > 0) {
             int first = sc.nextInt();
             int second = sc.nextInt();
 
-            if(first > second) {
-                int tmp = first;
-                first = second;
-                second = tmp;
-            }
-
-            if(badCombinations[first] == null) {
-                badCombinations[first] = new HashSet<>();
-            }
-
-            badCombinations[first].add(second);
+            badCombinations[first][second] = true;
+            badCombinations[second][first] = true;
         }
     }
 
-    static void eatIceCream(int now) {
-        int iceCreamCount = iceCreams.size();
-
+    static void eatIceCream(int iceCreamCount, int now) {
         if(iceCreamCount == 3) {
             ans++;
             return;
@@ -48,21 +37,17 @@ public class Main {
             boolean canEat = true;
 
             for(int beforeIceCream = 0; beforeIceCream < iceCreamCount; beforeIceCream++) {
-                if(!canEatTogether(iceCreams.get(beforeIceCream), iceCreamIdx)) {
+                if(badCombinations[iceCreams[beforeIceCream]][iceCreamIdx]) {
                     canEat = false;
+                    break;
                 }
             }
 
             if(canEat) {
-                iceCreams.add(iceCreamIdx);
-                eatIceCream(iceCreamIdx + 1);
-                iceCreams.remove(iceCreamCount);
+                iceCreams[iceCreamCount] = iceCreamIdx;
+                eatIceCream(iceCreamCount + 1, iceCreamIdx + 1);
             }
         }
 
-    }
-
-    static boolean canEatTogether(int first, int second) {
-        return badCombinations[first] == null || !badCombinations[first].contains(second);
     }
 }

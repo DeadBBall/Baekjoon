@@ -2,6 +2,7 @@ import java.util.*;
 
 public class Main {
     static Scanner sc = new Scanner(System.in);
+    static StringBuilder ansMaker;
     static List<Integer>[] subordinates;
     static int n, m;
     static int[] dp;
@@ -10,8 +11,9 @@ public class Main {
         input();
         praiseSubordinates(1);
         for(int staff = 1; staff <= n; staff++) {
-            System.out.print(dp[staff] + " ");
+           ansMaker.append(dp[staff]).append(" ");
         }
+        System.out.print(ansMaker);
     }
 
     static void input() {
@@ -38,6 +40,8 @@ public class Main {
 
             dp[staff] += power;
         }
+
+        ansMaker = new StringBuilder();
     }
 
     static void praiseSubordinates(int now) {

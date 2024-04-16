@@ -2,6 +2,7 @@ import java.util.*;
 
 public class Main {
     static Scanner sc = new Scanner(System.in);
+    static int[] coins = {1, 2, 5, 7};
     static int n;
     static int[] dp;
 
@@ -19,19 +20,10 @@ public class Main {
     }
 
     static void giveChange() {
-        for(int money = 1; money <= n; money++) {
-            dp[money] = Math.min(dp[money - 1] + 1, dp[money]);
-            
-            if(money >= 2) {
-                dp[money] = Math.min(dp[money - 2] + 1, dp[money]);
-            }
-            if(money >= 5) {
-                dp[money] = Math.min(dp[money - 5] + 1, dp[money]);
-            }
-            if(money >= 7) {
-                dp[money] = Math.min(dp[money - 7] + 1, dp[money]);
+        for(int coin : coins) {
+            for (int money = coin; money <= n; money++) {
+                dp[money] = Math.min(dp[money - coin] + 1, dp[money]);
             }
         }
     }
-
 }

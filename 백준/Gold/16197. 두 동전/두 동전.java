@@ -54,35 +54,36 @@ public class Main {
                 int ny2 = now.y2 + DY[drct];
                 int nx2 = now.x2 + DX[drct];
 
-                if((isOut(ny1, nx1) && !isOut(ny2, nx2)) || (!isOut(ny1, nx1) && isOut(ny2, nx2))) {
+                int outCount = 0;
+
+                if(isOut(ny1, nx1)) outCount++;
+
+                if(isOut(ny2, nx2)) outCount++;
+
+                if(outCount == 1) {
                     ans = now.moveCount + 1;
                     return;
                 }
 
-                else if(isOut(ny1, nx1) && isOut(ny2, nx2)) continue;
+                if(outCount == 2) continue;
 
-                if(board[ny1][nx1] == WALL && board[ny2][nx2] == WALL) continue;
+                int wallCount = 0;
 
                 if(board[ny1][nx1] == WALL) {
                     ny1 = now.y1;
                     nx1 = now.x1;
+                    wallCount++;
                 }
 
                 if(board[ny2][nx2] == WALL) {
                     ny2 = now.y2;
                     nx2 = now.x2;
+                    wallCount++;
                 }
 
-                if(ny1 == ny2 && nx1 == nx2) {
-                    if(ny1 == now.y1 && nx1 == now.x1) {
-                        ny2 = now.y2;
-                        nx2 = now.x2;
-                    }
-                    else {
-                        ny1 = now.y1;
-                        nx1 = now.x1;
-                    }
-                }
+                if(wallCount == 2) continue;
+
+                if(ny1 == ny2 && nx1 == nx2) continue;
 
                 turnQueue.add(new Turn(ny1, nx1, ny2, nx2, now.moveCount + 1));
             }

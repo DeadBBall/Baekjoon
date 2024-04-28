@@ -22,69 +22,45 @@ public class Main {
         if((a + b + c) % 3 != 0) return 0;
 
         if(a == b && b == c) return 1;
-        
+
         Queue<Turn> turns = new LinkedList<>();
         turns.add(new Turn(a, b, c));
         visit[a][b] = visit[b][a] = visit[a][c] = visit[c][a] = visit[b][c] = visit[c][b] = true;
 
         while(!turns.isEmpty()) {
             Turn now = turns.remove();
-
+            
             if(now.a != now.b) {
-                int na = 0;
-                int nb = 0;
-                int nc = now.c;
-                if(now.a > now.b) {
-                    na = now.a - now.b;
-                    nb = 2 * now.b;
-                }
-                else {
-                    na = 2 * now.a;
-                    nb = now.b - now.a;
-                }
-                if(na == nb && nb == nc) return 1;
+                int na = now.a > now.b ? now.a - now.b : 2 * now.a;
+                int nb = now.a > now.b ? 2 * now.b : now.b - now.a;
+                
+                if(na == nb && nb == now.c) return 1;
 
-                if(!visit[na][nb] && !visit[nb][na]) {
+                if(!visit[na][nb]) {
                     visit[na][nb] = visit[nb][na] = true;
-                    turns.add(new Turn(na, nb, nc));
+                    turns.add(new Turn(na, nb, now.c));
                 }
             }
             if(now.b != now.c) {
-                int na = now.a;
-                int nb = 0;
-                int nc = 0;
-                if(now.b > now.c) {
-                    nb = now.b - now.c;
-                    nc = 2 * now.c;
-                }
-                else {
-                    nb = 2 * now.b;
-                    nc = now.c - now.b;
-                }
-                if(na == nb && nb == nc) return 1;
+                int nb = now.b > now.c ? now.b - now.c : 2 * now.b;
+                int nc = now.b > now.c ? 2 * now.c : now.c - now.b;
+                
+                if(now.a == nb && nb == nc) return 1;
 
-                if(!visit[nb][nc] && !visit[nc][nb]) {
+                if(!visit[nb][nc]) {
                     visit[nb][nc] = visit[nc][nb] = true;
-                    turns.add(new Turn(na, nb, nc));
+                    turns.add(new Turn(now.a, nb, nc));
                 }
             }
             if(now.a != now.c) {
-                int na = 0;
-                int nb = now.b;
-                int nc = 0;
-                if(now.a > now.c) {
-                    na = now.a - now.c;
-                    nc = 2 * now.c;
-                }
-                else {
-                    na = 2 * now.a;
-                    nc = now.c - now.a;
-                }
-                if(na == nb && nb == nc) return 1;
+                int na = now.a > now.c ? now.a - now.c : 2 * now.a;
+                int nc = now.a > now.c ? 2 * now.c : now.c - now.a;
+                
+                if(na == now.b && now.b == nc) return 1;
 
-                if(!visit[na][nc] && !visit[nc][na]) {
+                if(!visit[na][nc]) {
                     visit[na][nc] = visit[nc][na] = true;
-                    turns.add(new Turn(na, nb, nc));
+                    turns.add(new Turn(na, now.b, nc));
                 }
             }
         }

@@ -6,7 +6,8 @@ public class Main {
     static Scanner sc = new Scanner(System.in);
     static int n, m, maxRoomSize, roomCount, maxTwoRoomSize;
     static int[][] board;
-    static Room[][] rooms;
+    static int[][] rooms;
+    static List<Integer> roomSizes;
     static boolean[][] visit;
 
     public static void main(String[] args) {
@@ -19,8 +20,9 @@ public class Main {
         n = sc.nextInt();
         m = sc.nextInt();
         board = new int[m][n];
-        rooms = new Room[m][n];
+        rooms = new int[m][n];
         visit = new boolean[m][n];
+        roomSizes = new ArrayList<>();
 
         for(int y = 0; y < m; y++) {
             for(int x = 0; x < n; x++) {
@@ -48,8 +50,9 @@ public class Main {
 
                     if(!canMove(ny, nx)) continue;
 
-                    if(rooms[y][x].idx != rooms[ny][nx].idx) {
-                        maxTwoRoomSize = Math.max(rooms[y][x].size + rooms[ny][nx].size, maxTwoRoomSize);
+                    if(rooms[y][x] != rooms[ny][nx]) {
+                        maxTwoRoomSize = Math.max(
+                                roomSizes.get(rooms[y][x] - 1) + roomSizes.get(rooms[ny][nx] - 1), maxTwoRoomSize);
                     }
                 }
             }
@@ -65,7 +68,7 @@ public class Main {
 
         posQueue.add(new Position(startY, startX));
 
-        rooms[startY][startX] = new Room(roomIdx, 0);
+        rooms[startY][startX] = roomIdx;
 
         int roomSize = 1;
 
@@ -85,7 +88,7 @@ public class Main {
 
                         roomSize++;
 
-                        rooms[ny][nx] = new Room(roomIdx, 0);
+                        rooms[ny][nx] = roomIdx;
 
                         posQueue.add(new Position(ny, nx));
                     }
@@ -95,31 +98,7 @@ public class Main {
             }
         }
 
-        posQueue.add(new Position(startY, startX));
-
-        rooms[startY][startX].size = roomSize;
-
-        while(!posQueue.isEmpty()) {
-            Position now = posQueue.remove();
-
-            int num = 1;
-
-            for(int drct = 0; drct < 4; drct++) {
-                if((board[now.y][now.x] & num) != num) {
-                    int ny = now.y + DY[drct];
-                    int nx = now.x + DX[drct];
-
-                    if(rooms[ny][nx].size != roomSize) {
-
-                        rooms[ny][nx].size = roomSize;
-
-                        posQueue.add(new Position(ny, nx));
-                    }
-                }
-
-                num <<= 1;
-            }
-        }
+        roomSizes.add(roomSize);
 
         maxRoomSize = Math.max(maxRoomSize, roomSize);
     }
@@ -136,15 +115,5 @@ class Position {
     public Position(int y, int x) {
         this.y = y;
         this.x = x;
-    }
-}
-
-class Room {
-    int idx;
-    int size;
-
-    public Room(int idx, int size) {
-        this.idx = idx;
-        this.size = size;
     }
 }

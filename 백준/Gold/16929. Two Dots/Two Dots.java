@@ -7,7 +7,6 @@ public class Main {
     static int n, m;
     static String[] board;
     static boolean[][] visit;
-    static boolean flag;
 
     public static void main(String[] args) {
         input();
@@ -28,16 +27,14 @@ public class Main {
     static boolean playTwoDots() {
         for(int y = 0; y < n; y++) {
             for(int x = 0; x < m; x++) {
-                findCycle(y, x, y, x, 1);
-
-                if(flag) return true;
+                if(findCycle(y, x, y, x, 1)) return true;
             }
         }
 
         return false;
     }
 
-    static void findCycle(int startY, int startX, int nowY, int nowX, int dotCnt) {
+    static boolean findCycle(int startY, int startX, int nowY, int nowX, int dotCnt) {
         visit[nowY][nowX] = true;
 
         for(int drct = 0; drct < 4; drct++) {
@@ -47,20 +44,23 @@ public class Main {
             if(!canMove(ny, nx) || board[startY].charAt(startX) != board[ny].charAt(nx)) continue;
 
             if(dotCnt >= 4 && ny == startY && nx == startX) {
-                flag = true;
-                return;
+                return true;
             }
 
             if(visit[ny][nx]) continue;
 
             visit[ny][nx] = true;
 
-            findCycle(startY, startX, ny, nx, dotCnt + 1);
+            if(findCycle(startY, startX, ny, nx, dotCnt + 1)) {
+                visit[ny][nx] = false;
+                return true;
+            }
 
             visit[ny][nx] = false;
         }
-
         visit[nowY][nowX] = false;
+
+        return false;
     }
 
     static boolean canMove(int y, int x) {

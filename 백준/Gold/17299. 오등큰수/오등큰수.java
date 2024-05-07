@@ -7,7 +7,7 @@ public class Main {
     static Scanner sc = new Scanner(System.in);
     static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
     static int n;
-    static Stack<Integer> numbers;
+    static int[] numbers;
     static Map<Integer, Integer> counts;
     static StringBuilder ansMaker;
 
@@ -19,8 +19,8 @@ public class Main {
 
     static void input() throws IOException {
         n = Integer.parseInt(br.readLine());
+        numbers = new int[n];
         counts = new HashMap<>();
-        numbers = new Stack<>();
 
         StringTokenizer st = new StringTokenizer(br.readLine());
 
@@ -28,28 +28,30 @@ public class Main {
             int num = Integer.parseInt(st.nextToken());
 
             counts.put(num, counts.getOrDefault(num, 0) + 1);
-            numbers.push(num);
+            numbers[idx] = num;
         }
 
         ansMaker = new StringBuilder();
     }
 
     static void findNumber() {
-        Stack<Integer> rightNumbers = new Stack<>();
-        List<Integer> answers = new ArrayList<>();
+        Stack<Integer> numStack = new Stack<>();
+        int[] answers = new int[n];
 
-        while(!numbers.isEmpty()) {
-            int now = numbers.pop();
-
-            while(!rightNumbers.isEmpty() && counts.get(rightNumbers.peek()) <= counts.get(now)) {
-                rightNumbers.pop();
+        for(int idx = 0; idx < n; idx++) {
+            while(!numStack.isEmpty() && counts.get(numbers[numStack.peek()]) < counts.get(numbers[idx])) {
+                answers[numStack.pop()] = numbers[idx];
             }
-            answers.add(rightNumbers.isEmpty() ? -1 : rightNumbers.peek());
-            rightNumbers.add(now);
+
+            numStack.add(idx);
         }
 
-        for(int idx = answers.size() - 1; idx >= 0; idx--) {
-            ansMaker.append(answers.get(idx)).append(" ");
+        while(!numStack.isEmpty()) {
+            answers[numStack.pop()] = -1;
+        }
+
+        for(int answer : answers) {
+            ansMaker.append(answer).append(" ");
         }
     }
 }

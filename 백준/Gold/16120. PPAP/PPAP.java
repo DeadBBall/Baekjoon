@@ -1,5 +1,4 @@
 import java.util.Scanner;
-import java.util.Stack;
 
 public class Main {
     static Scanner sc = new Scanner(System.in);
@@ -15,22 +14,22 @@ public class Main {
     }
 
     static boolean checkPPAP() {
-        Stack<Character> stack = new Stack<>();
-        
+        int cnt = 0;
+
         for(int strIdx = 0; strIdx < inputStr.length(); strIdx++) {
             char now = inputStr.charAt(strIdx);
 
-            if(now == 'P') stack.push(now);
-            else {
-                if(stack.size() >= 2 && strIdx < inputStr.length() - 1 && inputStr.charAt(strIdx + 1) == 'P') {
-                    stack.pop();
-                    stack.pop();
+            if(now == 'P') cnt++;
+            else if(now == 'A' && cnt >= 2) {
+                if(strIdx < inputStr.length() - 1 && inputStr.charAt(strIdx + 1) == 'P') {
+                    cnt--;
+                    strIdx++;
                 } else return false;
             }
-            
+            else return false;
         }
-        
-        return stack.size() == 1;
+
+        return cnt == 1;
     }
 
 }

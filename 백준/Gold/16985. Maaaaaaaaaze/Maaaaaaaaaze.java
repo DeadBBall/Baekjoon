@@ -34,6 +34,8 @@ public class Main {
     }
 
     static void bruteForce(int z) {
+        if(ans == 12) return;
+        
         if(z == MAZE_SIZE) {
             changeOrder(0);
             return;

@@ -31,13 +31,21 @@ public class Main {
 
     static void makeMoney() {
         for(int ab = 0; ab <= Math.min(a, b); ab++) {
-            for(int bc = 0; bc <= Math.min(b - ab, c); bc++) {
-                int ca = Math.min(a - ab, c - bc);
+            int bc = 0;
+            int ca = 0;
 
-                int profit = ab * abCost + bc * bcCost + ca * caCost;
 
-                ans = Math.max(ans, profit);
+            if(bcCost > caCost) {
+                bc = Math.min(b - ab, c);
+                ca = Math.min(a - ab, c - bc);
+            } else {
+                ca = Math.min(a - ab, c);
+                bc = Math.min(b - ab, c - ca);
             }
+
+            int profit = ab * abCost + bc * bcCost + ca * caCost;
+            
+            ans = Math.max(ans, profit);
         }
     }
 

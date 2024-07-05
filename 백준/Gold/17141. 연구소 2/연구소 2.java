@@ -8,7 +8,7 @@ public class Main {
     static final int[] DY = {1, -1, 0, 0};
     static final int[] DX = {0, 0, 1, -1};
     static Scanner sc = new Scanner(System.in);
-    static int n, m, ans;
+    static int n, m, ans, emptyCnt;
     static int[][] board;
     static List<Virus> virus;
 
@@ -31,7 +31,8 @@ public class Main {
 
                 if(board[y][x] == VIRUS) {
                     virus.add(new Virus(y, x));
-                }
+                    emptyCnt++;
+                } else if(board[y][x] == EMPTY) emptyCnt++;
             }
         }
 
@@ -61,9 +62,10 @@ public class Main {
         Queue<Virus> virusQueue = new LinkedList<>(virusList);
 
         int time = 0;
+        int virusCnt = m;
 
         while(!virusQueue.isEmpty()) {
-            if(isFinisihed(visit)) return time;
+            if(virusCnt == emptyCnt) return time;
 
             time++;
 
@@ -80,6 +82,8 @@ public class Main {
 
                     visit[ny][nx] = true;
 
+                    virusCnt++;
+
                     virusQueue.add(new Virus(ny, nx));
                 }
             }
@@ -91,16 +95,6 @@ public class Main {
 
     static boolean canMove(int y, int x) {
         return y >= 0 && y < n && x >= 0 && x < n;
-    }
-
-    static boolean isFinisihed(boolean[][] visit) {
-        for(int y = 0; y < n; y++) {
-            for(int x = 0; x < n; x++) {
-                if(!visit[y][x] && board[y][x] != WALL) return false;
-            }
-        }
-
-        return true;
     }
 }
 

@@ -43,6 +43,8 @@ public class Main {
                 }
 
                 totalTail += Math.min(nowTail, n - nowTail);
+                
+                if(totalTail >= ans) return;
             }
 
             ans = Math.min(ans, totalTail);

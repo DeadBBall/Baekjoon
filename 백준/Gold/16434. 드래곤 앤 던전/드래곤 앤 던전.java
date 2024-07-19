@@ -3,6 +3,7 @@ import java.util.*;
 public class Main {
     static Scanner sc = new Scanner(System.in);
     static int n, atk;
+    static long right;
     static Room[] rooms;
 
     public static void main(String[] args) {
@@ -21,17 +22,20 @@ public class Main {
             int h = sc.nextInt();
 
             rooms[roomIdx] = new Room(type == 2, a, h);
+
+            if(type == 1) {
+                right += (long) ((h + atk - 1) / atk) * a;
+            }
         }
     }
 
     static long huntDragon() {
         long left = 1;
-        long right = (long) 9e18;
         long ans = 0;
 
         while(left <= right) {
             long mid = (left + right) >> 1;
-
+            
             if(huntDragon(mid)) {
                 right = mid - 1;
                 ans = mid;
@@ -46,7 +50,7 @@ public class Main {
     static boolean huntDragon(long hp) {
         long nowHp = hp;
         long nowAtk = atk;
-        
+
         for(Room room : rooms) {
             if(room.isPotion) {
                 nowAtk += room.a;

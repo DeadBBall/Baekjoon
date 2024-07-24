@@ -21,19 +21,19 @@ public class Main {
     static void input() throws IOException {
         n = Integer.parseInt(br.readLine());
         board = new int[n + 1][n + 1];
-        sumBoard = new int[n + 1][n + 1][2];
+        sumBoard = new int[2][n + 1][n + 1];
 
         for(int y = 1; y <= n; y++) {
             StringTokenizer st = new StringTokenizer(br.readLine());
             for(int x = 1; x <= n; x++) {
                 board[y][x] = Integer.parseInt(st.nextToken());
-                sumBoard[y][x][0] = sumBoard[y][x - 1][0] + board[y][x];
+                sumBoard[0][y][x] = sumBoard[0][y][x - 1] + board[y][x];
             }
         }
 
         for(int x = 1; x <= n; x++) {
             for(int y = 1; y <= n; y++) {
-                sumBoard[y][x][1] = sumBoard[y - 1][x][1] + board[y][x];
+                sumBoard[1][y][x] = sumBoard[1][y - 1][x] + board[y][x];
             }
         }
 
@@ -48,14 +48,14 @@ public class Main {
             int max = 0;
 
             if(up != 1) {
-                int sum = sumBoard[up - 1][right][0] - sumBoard[up - 1][left - 1][0];
+                int sum = sumBoard[0][up - 1][right] - sumBoard[0][up - 1][left - 1];
 
                 if(max < sum) {
                     max = sum;
                 }
             }
             if(down != n) {
-                int sum = sumBoard[down + 1][right][0] - sumBoard[down + 1][left - 1][0];
+                int sum = sumBoard[0][down + 1][right] - sumBoard[0][down + 1][left - 1];
 
                 if(max < sum) {
                     max = sum;
@@ -63,7 +63,7 @@ public class Main {
                 }
             }
             if(left != 1) {
-                int sum = sumBoard[down][left - 1][1] - sumBoard[up - 1][left - 1][1];
+                int sum = sumBoard[1][down][left - 1] - sumBoard[1][up - 1][left - 1];
 
                 if(max < sum) {
                     max = sum;
@@ -71,7 +71,7 @@ public class Main {
                 }
             }
             if(right != n) {
-                int sum = sumBoard[down][right + 1][1] - sumBoard[up - 1][right + 1][1];
+                int sum = sumBoard[1][down][right + 1] - sumBoard[1][up - 1][right + 1];
 
                 if(max < sum) {
                     max = sum;

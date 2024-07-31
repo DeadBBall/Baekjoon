@@ -3,7 +3,7 @@ import java.util.*;
 public class Main {
     static Scanner sc = new Scanner(System.in);
     static int target, m, n, ans;
-    static Map<Integer, Integer> aPizza, bPizza;
+    static int[] aPizza, bPizza;
 
     public static void main(String[] args) {
         input();
@@ -16,44 +16,53 @@ public class Main {
         m = sc.nextInt();
         n = sc.nextInt();
 
-        aPizza = getPizzaMap(m);
-        bPizza = getPizzaMap(n);
+        aPizza = getPizza(m);
+        bPizza = getPizza(n);
     }
 
-    static Map<Integer, Integer> getPizzaMap(int totalSize) {
+    static int[] getPizza(int totalSize) {
         int[] pizza = new int[totalSize * 2];
-        int sum = 0;
+
+        int total = 0;
 
         for(int idx = 0; idx < totalSize; idx++) {
             int size = sc.nextInt();
 
-            sum += size;
             pizza[idx] = pizza[idx + totalSize] = size;
+            total += size;
         }
 
-        Map<Integer, Integer> pizzaMap = new HashMap<>();
-        pizzaMap.put(sum, 1);
+        int[] cases = new int[target];
+
+        if(total == target) {
+            ans++;
+        } else if(total < target) {
+            cases[total]++;
+        }
 
         for(int i = 0; i < totalSize; i++) {
-            sum = 0;
+            int sum = 0;
 
             for(int j = i; j < i + totalSize - 1; j++) {
                 sum += pizza[j];
-                pizzaMap.put(sum, pizzaMap.getOrDefault(sum, 0) + 1);
+                
+                if(sum == target) {
+                    ans++;
+                    break;
+                }
+
+                if(sum > target) break;
+
+                cases[sum]++;
             }
         }
 
-        return pizzaMap;
+        return cases;
     }
 
     static void sellPizza() {
-        for(int size : aPizza.keySet()) {
-            if(size >= target) continue;
-
-            ans += aPizza.get(size) * bPizza.getOrDefault(target - size, 0);
+        for(int a = 1; a < target; a++) {
+            ans += aPizza[a] * bPizza[target - a];
         }
-
-        ans += aPizza.getOrDefault(target, 0);
-        ans += bPizza.getOrDefault(target, 0);
     }
 }

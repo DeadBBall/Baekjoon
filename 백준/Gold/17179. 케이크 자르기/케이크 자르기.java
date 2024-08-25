@@ -1,11 +1,9 @@
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Scanner;
 
 public class Main {
     static Scanner sc = new Scanner(System.in);
     static int m, l, left, right, ans;
-    static List<Integer> cakes;
+    static int[] cakes;
     static StringBuilder ansMaker = new StringBuilder();
 
     public static void main(String[] args) {
@@ -22,29 +20,25 @@ public class Main {
     static void input() {
         m = sc.nextInt();
         l = sc.nextInt();
-        cakes = new ArrayList<>();
+        cakes = new int[m + 1];
 
-        cakes.add(0);
-
-        for(int idx = 1; idx <= m; idx++) {
-            cakes.add(sc.nextInt());
+        for(int idx = 0; idx < m; idx++) {
+            cakes[idx] = sc.nextInt();
         }
 
-        if(cakes.get(m) != l) {
-            cakes.add(l);
-        }
+        cakes[m] = l;
     }
 
     static void distribute() {
         int q = sc.nextInt();
 
         left = 1;
-        right = cakes.get(cakes.size() - 1);
+        right = l;
 
         while(left <= right) {
             int mid = (right - left) / 2 + left;
 
-            if(count(mid) < q + 1) {
+            if(count(mid) <= q) {
                 right = mid - 1;
             } else {
                 ans = mid;
@@ -59,8 +53,12 @@ public class Main {
         int cnt = 0;
         int nowCake = 0;
 
-        for(int idx = 1; idx < cakes.size(); idx++) {
-            nowCake += cakes.get(idx) - cakes.get(idx - 1);
+        int prev = 0;
+
+        for(int idx = 0; idx <= m; idx++) {
+            nowCake += cakes[idx] - prev;
+
+            prev = cakes[idx];
 
             if(nowCake >= limit) {
                 cnt++;

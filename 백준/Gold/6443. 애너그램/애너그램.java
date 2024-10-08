@@ -2,10 +2,9 @@ import java.util.*;
 
 public class Main {
     static Scanner sc = new Scanner(System.in);
-    static char[] word;
     static StringBuilder ansMaker = new StringBuilder();
-    static Set<String> words;
-    static boolean[] visit;
+    static int[] counts;
+    static String word;
 
     public static void main(String[] args) {
         int n = sc.nextInt();
@@ -19,35 +18,31 @@ public class Main {
     }
 
     static void input() {
-        word = sc.next().toCharArray();
+        word = sc.next();
 
-        Arrays.sort(word);
+        counts = new int[26];
 
-        words = new HashSet<>();
-
-        visit = new boolean[word.length];
+        for(int idx = 0; idx < word.length(); idx++) {
+            counts[word.charAt(idx) - 'a']++;
+        }
     }
 
     static void makeAnagram(int depth, StringBuilder nowWord) {
-        if(depth == word.length) {
+        if(depth == word.length()) {
             ansMaker.append(nowWord.toString()).append("\n");
             return;
         }
 
-        for(int idx = 0; idx < word.length; idx++) {
-            if(visit[idx]) continue;
+        for(int idx = 0; idx < 26; idx++) {
+            if(counts[idx] > 0) {
+                counts[idx]--;
+                nowWord.append((char)('a' + idx));
 
-            visit[idx] = true;
-            nowWord.append(word[idx]);
-
-            if(!words.contains(nowWord.toString())) {
-                words.add(nowWord.toString());
                 makeAnagram(depth + 1, nowWord);
+
+                counts[idx]++;
+                nowWord.deleteCharAt(nowWord.length() - 1);
             }
-
-            nowWord.deleteCharAt(nowWord.length() - 1);
-            visit[idx] = false;
         }
-
     }
 }

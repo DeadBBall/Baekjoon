@@ -10,54 +10,28 @@ public class Main {
     public static void main(String[] args) {
         input();
         getResources();
-        System.out.println(dp[n - 1][m - 1]);
+        System.out.println(dp[n][m]);
     }
 
     static void input() {
         n = sc.nextInt();
         m = sc.nextInt();
         board = new int[n][m];
-        dp = new int[n][m];
+        dp = new int[n + 1][m + 1];
 
         for(int y = 0; y < n; y++) {
             for(int x = 0; x < m; x++) {
                 board[y][x] = sc.nextInt();
-                dp[y][x] = -1;
             }
         }
-
-        dp[0][0] = board[0][0];
     }
 
     static void getResources() {
-        Queue<Point> points = new LinkedList<>();
-        points.add(new Point(0, 0));
-
-        while(!points.isEmpty()) {
-            Point now = points.remove();
-
-            for(int drct = 0; drct < 2; drct++) {
-                int ny = now.y + DY[drct];
-                int nx = now.x + DX[drct];
-
-                if(ny >= n || nx >= m) continue;
-
-                if(dp[ny][nx] < dp[now.y][now.x] + board[ny][nx]) {
-                    dp[ny][nx] = dp[now.y][now.x] + board[ny][nx];
-                    points.add(new Point(ny, nx));
-                }
+        for (int i = 1; i < n + 1; i++) {
+            for (int j = 1; j < m + 1; j++) {
+                dp[i][j] = Math.max(dp[i - 1][j], dp[i][j - 1]) + board[i - 1][j - 1];
             }
         }
     }
 
-}
-
-class Point {
-    int y;
-    int x;
-
-    public Point(int y, int x) {
-        this.y = y;
-        this.x = x;
-    }
 }

@@ -8,7 +8,7 @@ public class Main {
     public static void main(String[] args) {
         input();
         makeP();
-        System.out.println(ans);
+        System.out.println(ans + 1);
     }
 
     static void input() {
@@ -17,15 +17,13 @@ public class Main {
     }
 
     static void makeP() {
+        int idx = 0;
+
         for(int i = 0; i < p.length(); i++) {
-            for(int j = p.length(); j > i; j--) {
-                if(s.contains(p.substring(i, j))) {
-                    i += (j - i) - 1;
-                    ans++;
-                    break;
-                }
+            if(!s.contains(p.substring(idx, i + 1))) {
+                ans++;
+                idx = i;
             }
         }
     }
-
 }

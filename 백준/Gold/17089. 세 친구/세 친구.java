@@ -35,9 +35,13 @@ public class Main {
 
     static void findFriends() {
         for(int a = 1; a <= n; a++) {
+            if(friends[a].size() < 2) continue;
+
             for (int b : friends[a]) {
+                if(friends[b].size() < 2) continue;
+
                 for(int c : friends[b]) {
-                    if(c == a) continue;
+                    if(c == a || friends[c].size() < 2) continue;
 
                     if(friends[c].contains(a)) {
                         int sum = friends[a].size() + friends[b].size() + friends[c].size() - 6;

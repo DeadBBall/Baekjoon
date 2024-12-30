@@ -31,15 +31,11 @@ public class Main {
                     flag = true;
                     break;
                 }
-            }
 
-            if(!flag) {
-                for(int idx = 0; idx < 4; idx++) {
-                    if(stacks[idx].isEmpty()) {
-                        stacks[idx].push(num);
-                        flag = true;
-                        break;
-                    }
+                if(stacks[idx].isEmpty()) {
+                    stacks[idx].push(num);
+                    flag = true;
+                    break;
                 }
             }
 
